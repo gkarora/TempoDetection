@@ -46,3 +46,4 @@ Temporary Items
 #VS runtime dirs need to be ignored
 /Debug/*
 /x64/*
+*.vcxproj
