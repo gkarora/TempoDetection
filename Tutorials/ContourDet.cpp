@@ -4,6 +4,8 @@
 //#include "stdafx.h"
 #include <cv.h>
 #include <highgui.h>
+#include <ContourDet.h>
+
 using namespace std;
 
 int ContourDet()
