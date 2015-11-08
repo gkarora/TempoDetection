@@ -2,11 +2,7 @@
 ////  MotionTrack.cpp
 ////  FYDP
 ////
-////  Created by Canmanie Ponnambalam on 2015-10-20.
-////  Copyright © 2015 Canmanie Ponnambalam. All rights reserved.
-////
-
-//https://www.youtube.com/watch?v=X6rPdRZzgjg
+//tutorial and code found at https://www.youtube.com/watch?v=X6rPdRZzgjg
 
 //Written by  Kyle Hounslow, December 2013
 
