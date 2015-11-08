@@ -26,6 +26,7 @@
 #include "opencv2/videoio/videoio.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "MotionTrack.h"
+#include "stdafx.h"
 
 #include <iostream>
 #include <fstream>

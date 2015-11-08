@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "gurneet.h"
-#include "MotionTrack.h"
 
 
 int _tmain(int argc, _TCHAR* argv[])
