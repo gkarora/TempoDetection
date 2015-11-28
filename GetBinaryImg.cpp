@@ -6,7 +6,7 @@
 //  Copyright © 2015 Gurneet Arora. All rights reserved.
 //
 
-#include "MotionTracking.hpp"
+#include "GetBinaryImg.hpp"
 
 
 //our sensitivity value to be used in the absdiff() function

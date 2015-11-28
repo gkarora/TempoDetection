@@ -12,9 +12,6 @@ int ratio = 3;
 int kernel_size = 3;
 
 
-/**
-* @function CannyThreshold
- */
 vector<int> use_houghLineTransform(Mat src)
 {
     if (!src.data)
@@ -63,7 +60,7 @@ vector<int> use_houghLineTransform(Mat src)
 }
 
 
-/** contours */
+/** contours -- not used */
 int use_contours(Mat src)
 {
 	if (!src.data || src.empty())

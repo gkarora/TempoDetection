@@ -2,8 +2,7 @@
 //
 
 #include "stdafx.h"
-//#include "gurneet.h"
-#include "MotionTracking.hpp"
+#include "GetBinaryImg.hpp"
 
 int main(int argc, const char* argv[])
 {
