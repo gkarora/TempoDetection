@@ -40,7 +40,7 @@ int get_binary_image(){
         
         //we can loop the video by re-opening the capture every time the video reaches its last frame
         
-        capture.open("4-4_80bpm.mov");
+        capture.open("test_1.mov");
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";
@@ -50,7 +50,6 @@ int get_binary_image(){
 
         ofstream myfile;
         myfile.open ("data.txt", ios::trunc);
-        myfile << "(x, y)\n";
         myfile.close();
         
         
@@ -80,9 +79,11 @@ int get_binary_image(){
 
             //use_contours(thresholdImage);
             vector<int> coord = use_houghLineTransform(thresholdImage);
-            myfile.open("data.txt", ios::app);
-            myfile << "(" +intToString(coord[0])+ ", "+ intToString(coord[1])+")\n";
-            myfile.close();
+            if(coord[0] != 10000){
+                myfile.open("data.txt", ios::app);
+                myfile << intToString(coord[0])+ " "+ intToString(coord[1])+"\n";
+                myfile.close();
+            }
             //show our captured frame
             //imshow("Frame1",frame1);
             //check to see if a button has been pressed.

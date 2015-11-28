@@ -20,7 +20,7 @@ vector<int> use_houghLineTransform(Mat src)
         return ret;
     }
     
-    //resize(src, src, Size(450,500));
+    resize(src, src, Size(350,500));
     //blur(src, src, Size(4, 4));
     
     //Canny Edge Detector
