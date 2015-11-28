@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "gurneet.h"
+#include "FindLine.h"
 
 Mat src_resize, src_gray;
 Mat dst, cdst, pdst, dst2;

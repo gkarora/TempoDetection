@@ -9,10 +9,10 @@
 #ifndef GetBinaryImg_hpp
 #define GetBinaryImg_hpp
 #include "stdafx.h"
-#include <stdio.h>
-#include "gurneet.h"
 #include <iostream>
 #include <fstream>
+#include "FindLine.h"
+#include <stdio.h>
 #endif
 
 //function declaration
