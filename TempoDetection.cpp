@@ -2,11 +2,16 @@
 //
 
 #include "stdafx.h"
-#include "gurneet.h"
+//#include "gurneet.h"
+#include "MotionTracking.hpp"
 
-
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, const char* argv[])
 {
-	filter_image();
+//    Mat src = imread("Capture.PNG");
+//	  use_contours(src);
+//    use_houghLineTransform(src);
+//    waitKey(0);
+//    
+    get_binary_image();
 	return 0;
 }

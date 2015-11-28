@@ -2,4 +2,5 @@
 #include "stdafx.h"
 
 // Function declaration
-int filter_image();
+int use_contours(Mat src);
+vector<int> use_houghLineTransform(Mat src);

@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "targetver.h"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -16,10 +15,7 @@ using namespace cv;
 using namespace std;
 
 #include <stdio.h>
-#include <tchar.h>
+#include <iostream>
 
 
 
-
-
-// TODO: reference additional headers your program requires here

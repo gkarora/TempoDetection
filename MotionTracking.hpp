@@ -8,7 +8,13 @@
 
 #ifndef MotionTracking_hpp
 #define MotionTracking_hpp
-
+#include "stdafx.h"
 #include <stdio.h>
-
+#include "gurneet.h"
+#include <iostream>
+#include <fstream>
 #endif /* MotionTracking_hpp */
+
+//function declaration
+
+int get_binary_image();
