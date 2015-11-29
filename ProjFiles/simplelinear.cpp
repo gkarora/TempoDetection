@@ -26,8 +26,9 @@ double calcSD(double slopes[], int j){
     mean = sum/j;
     
     for (int i = 0; i<j; i++) {
-        sd = sqrt(pow((slopes[i]-mean),2)/(j-1));
+        sd += pow((slopes[i]-mean),2);
     }
+    sd = sqrt(sd/(double(j)-1));
     
     return sd;
 //    cout << "\n" << "standard deviation = ";
