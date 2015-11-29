@@ -51,16 +51,22 @@ int get_binary_image(){
         ofstream myfile;
         myfile.open ("data.txt", ios::trunc);
         myfile.close();
-        
-        
+        vector<int> last = {0, 0};
+        bool first = true;
+    
         while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1){
-
+            if(first){
             //read first frame
             capture.read(frame1);
-            //convert frame1 to gray scale for frame differencing
-            cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
             //copy second frame
             capture.read(frame2);
+                first = false;
+            }else{
+            frame2.copyTo(frame1);
+            capture.read(frame2);
+            }
+            //convert frame1 to gray scale for frame differencing
+            cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
             //convert frame2 to gray scale for frame differencing
             cv::cvtColor(frame2,grayImage2,COLOR_BGR2GRAY);
             //perform frame differencing with the sequential images. This will output an "intensity image"
@@ -69,7 +75,7 @@ int get_binary_image(){
             //threshold intensity image at a given sensitivity value
             cv::threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
             ////show the difference image and threshold image
-            //cv::imshow("Difference Image",differenceImage);
+            cv::imshow("Difference Image",differenceImage);
             //cv::imshow("Threshold Image", thresholdImage);
 
             //blur the image to get rid of the noise. This will output an intensity image
@@ -83,7 +89,13 @@ int get_binary_image(){
                 myfile.open("data.txt", ios::app);
                 myfile << intToString(coord[0])+ " "+ intToString(coord[1])+"\n";
                 myfile.close();
+            }else {
+                myfile.open("data.txt", ios::app);
+                myfile << intToString(last[0])+ " "+ intToString(last[1])+"\n";
+                myfile.close();
             }
+            last[0] = coord[0];
+            last[1] = coord[1];
             //show our captured frame
             //imshow("Frame1",frame1);
             //check to see if a button has been pressed.
