@@ -40,7 +40,7 @@ int get_binary_image(){
         
         //we can loop the video by re-opening the capture every time the video reaches its last frame
         
-        capture.open("conduct44more.mov");
+        capture.open("video.mov");
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";
@@ -52,22 +52,6 @@ int get_binary_image(){
         myfile.open ("data.txt", ios::trunc);
         myfile.close();
         vector<int> last = {0, 0};
-        bool first = true;
-    
-        while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1){
-            if(first){
-            //read first frame
-            capture.read(frame1);
-            //copy second frame
-            capture.read(frame2);
-                first = false;
-            }else{
-            frame2.copyTo(frame1);
-            capture.read(frame2);
-            }
-            //convert frame1 to gray scale for frame differencing
-            cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
-    
         bool first = true;
 
         while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1){
@@ -147,8 +131,7 @@ int get_binary_image(){
         }
         //release the capture before re-opening and looping again.
         capture.release();
-  //  }
     
     return 0;
-    
+
 }
