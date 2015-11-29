@@ -40,7 +40,7 @@ int get_binary_image(){
         
         //we can loop the video by re-opening the capture every time the video reaches its last frame
         
-        capture.open("video.mov");
+        capture.open("conduct44more.mov");
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";
@@ -67,6 +67,24 @@ int get_binary_image(){
             }
             //convert frame1 to gray scale for frame differencing
             cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
+    
+        bool first = true;
+
+        while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1){
+
+            if(first){
+                //read first frame
+                capture.read(frame1);
+                //copy second frame
+                capture.read(frame2);
+                first = false;
+            }else{
+                frame2.copyTo(frame1);
+                capture.read(frame2);
+            }
+            //convert frame1 to gray scale for frame differencing
+            cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
+
             //convert frame2 to gray scale for frame differencing
             cv::cvtColor(frame2,grayImage2,COLOR_BGR2GRAY);
             //perform frame differencing with the sequential images. This will output an "intensity image"
@@ -87,7 +105,7 @@ int get_binary_image(){
             vector<int> coord = use_houghLineTransform(thresholdImage);
             if(coord[0] != 10000){
                 myfile.open("data.txt", ios::app);
-                myfile << intToString(coord[0])+ " "+ intToString(coord[1])+"\n";
+                myfile << intToString(coord[0])+ " "+ intToString((-1*coord[1]))+"\n";
                 myfile.close();
             }else {
                 myfile.open("data.txt", ios::app);

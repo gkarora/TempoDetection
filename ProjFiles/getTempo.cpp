@@ -13,19 +13,18 @@
 
 std::ifstream infile("data.txt");
 
-double fps = 30.0;
+double fps = 30.0;//24.02;//30.0;
 double sd;
-//double den = 4.0/4.0; //the denominator is the numerator of the time signature
 
 int findPeaks(double arr[], int j)
 {
-    double sensitivity = sd/10.0;
+    double sensitivity = sd;//sqrt(sd);
     int count = 0;
     
     for (int i = 0; i < (j - 1); i++) {
         if (i==0) continue;
-        
-        if ((arr[i] - arr[i-1] > sensitivity) && (arr[i]-arr[i+1] > sensitivity)) {
+        // || ((arr[i] - arr[i-1] > (-1.0)*sensitivity) && (arr[i]-arr[i+1] > (-1.0)*sensitivity))
+        if (((arr[i] - arr[i-1] > sensitivity) && (arr[i]-arr[i+1] > sensitivity))) {
             count++;
         }
     }
@@ -34,7 +33,7 @@ int findPeaks(double arr[], int j)
 
 double getTempo() {
     int x,y;
-    int n = 3;
+    int n = 5;
     double a[n],b[n];
     double slopes[sizeof(infile)*10];
     
@@ -49,17 +48,20 @@ double getTempo() {
         
         if (count%n==0) {
             double slope = linSlope(a,b,n);
+            std::cout << slope <<"\n";
             slopes[j]=slope;
             j++;
+            index = -1;
         }
         count++;
+        index++;
     }
     
     sd = calcSD(slopes,j);
     double peaks = findPeaks(slopes,j);
-    peaks = peaks;///den;
+    //peaks = peaks;//den;
     std::cout << "\nsd: " << sd <<"\n";
-    std::cout << "Number of peaks: " << peaks << "\n";
+    std::cout << "Number of peaks: " << peaks << " out of " << j << " points\n";
     std::cout << "in " << count << " data points.\n";
     std::cout << "This means " << peaks/count <<" peaks per data point\n";
     std::cout << "And " << peaks/count*fps <<" peaks per second\n";
