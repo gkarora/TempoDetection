@@ -10,8 +10,8 @@
 #define simplelinear_hpp
 
 #include <stdio.h>
-
-double linSlope(double x[], double y[], int n);
+#include <queue>
+double linSlope(std::queue<int> x, std::queue<int> y, int n);
 double calcSD(double slopes[], int n);
 
 #endif /* simplelinear_hpp */

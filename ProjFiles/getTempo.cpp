@@ -9,21 +9,24 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <queue>
+
 #include "simplelinear.hpp"
 
 std::ifstream infile("data.txt");
 
-double fps = 30.0;//24.02;//30.0;
+double fps = 30.0;
 double sd;
 
 int findPeaks(double arr[], int j)
 {
-    double sensitivity = sd;//sqrt(sd);
+    double sensitivity = pow(sd,2);//sqrt(sd);
+    std::cout << "sd: " << sd << "\n";
     int count = 0;
     
     for (int i = 0; i < (j - 1); i++) {
         if (i==0) continue;
-        // || ((arr[i] - arr[i-1] > (-1.0)*sensitivity) && (arr[i]-arr[i+1] > (-1.0)*sensitivity))
+        
         if (((arr[i] - arr[i-1] > sensitivity) && (arr[i]-arr[i+1] > sensitivity))) {
             count++;
         }
@@ -34,38 +37,34 @@ int findPeaks(double arr[], int j)
 double getTempo() {
     int x,y;
     int n = 5;
-    double a[n],b[n];
+    
+    std::queue<int> a;
+    std::queue<int> b;
     double slopes[sizeof(infile)*10];
     
-    int index = 0;
-    int count = 1;
     int j=0;
     
     while (infile >> x >> y)
     {
-        a[index]=x;
-        b[index]=y;
-        
-        if (count%n==0) {
+        a.push(x);
+        b.push(y);
+        if (a.size()==n) {
             double slope = linSlope(a,b,n);
-            std::cout << slope <<"\n";
             slopes[j]=slope;
             j++;
-            index = -1;
+            a.pop();
+            b.pop();
         }
-        count++;
-        index++;
     }
     
+    double count = j+4;
     sd = calcSD(slopes,j);
     double peaks = findPeaks(slopes,j);
-    //peaks = peaks;//den;
-    std::cout << "\nsd: " << sd <<"\n";
     std::cout << "Number of peaks: " << peaks << " out of " << j << " points\n";
-    std::cout << "in " << count << " data points.\n";
+    std::cout << "in " << count<< " data points.\n";
     std::cout << "This means " << peaks/count <<" peaks per data point\n";
-    std::cout << "And " << peaks/count*fps <<" peaks per second\n";
-    std::cout << "And " << peaks/count*fps*60.0 <<" beats per minute\n";
+    std::cout << "And " << peaks/count*4*fps <<" peaks per second\n"; //because 4/4 time
+    std::cout << "And " << peaks/count*fps*4*60.0 <<" beats per minute\n";
     
     return 0;
 }

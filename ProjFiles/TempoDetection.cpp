@@ -12,7 +12,7 @@ int main(int argc, const char* argv[])
 //    use_houghLineTransform(src);
 //    waitKey(0);
 //    
-    get_binary_image();
+    //get_binary_image();
     getTempo();
 	return 0;
 }

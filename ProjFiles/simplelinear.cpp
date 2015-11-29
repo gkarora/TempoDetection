@@ -12,6 +12,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <cmath>
+
 using namespace std;
 
 double calcSD(double slopes[], int j){
@@ -35,7 +36,7 @@ double calcSD(double slopes[], int j){
 //    cout << sd;
 }
 
-double linSlope(double x[], double y[], int n)
+double linSlope(queue<int> x, queue<int> y, int n)
 {
     double intersect = 0;
     double slope = 0;
@@ -44,12 +45,18 @@ double linSlope(double x[], double y[], int n)
     double sumy = 0;
     double sumxsquared = 0;
     double sumxy = 0;
+    double this_x;
+    double this_y;
     
-    for (int i = 0; i<n; i++) {
-        sumx+=x[i];
-        sumy+=y[i];
-        sumxsquared+=pow(x[i],2);
-        sumxy+=x[i]*y[i];
+    while (x.size()>0) {
+        this_x = x.front();
+        this_y = y.front();
+        sumx+=this_x;
+        sumy+=this_y;
+        sumxsquared+=pow(this_x,2);
+        sumxy+=this_x*this_y;
+        x.pop();
+        y.pop();
     }
 
     slope = ((n*sumxy)-(sumx*sumy))/((n*sumxsquared)-pow(sumx,2));
