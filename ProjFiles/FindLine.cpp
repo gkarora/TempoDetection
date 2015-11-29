@@ -12,7 +12,7 @@ int ratio = 3;
 int kernel_size = 3;
 
 
-vector<int> use_houghLineTransform(Mat src)
+vector<int> use_houghLineTransform(Mat src, Mat org)
 {
     if (!src.data)
     {
@@ -25,7 +25,7 @@ vector<int> use_houghLineTransform(Mat src)
     
     //Canny Edge Detector
     Canny(src, dst, 50, 200, 3);
-	cvtColor(dst, cdst, CV_GRAY2BGR);
+	//cvtColor(dst, cdst, CV_GRAY2BGR);
    
 
 
@@ -38,7 +38,7 @@ vector<int> use_houghLineTransform(Mat src)
     for (size_t i = 0; i < lines.size(); i++)
     {
         Vec4i l = lines[i];
-        line(cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 3, CV_AA);
+        line(org, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 3, CV_AA);
        
         // In an image as we move down, y increases but visually we are looking for the highest y value
         if (l[3]<max_cord[1] && l[3]<l[1])
@@ -53,9 +53,9 @@ vector<int> use_houghLineTransform(Mat src)
         }
     }
     
-    circle(cdst,Point(max_cord[0],max_cord[1]),10,Scalar(0,255,0),2);
+    circle(org,Point(max_cord[0],max_cord[1]),10,Scalar(0,255,0),2);
     
-    imshow("Prob Hough Line Transform", cdst);
+    imshow("Prob Hough Line Transform", org);
     return max_cord;
 }
 

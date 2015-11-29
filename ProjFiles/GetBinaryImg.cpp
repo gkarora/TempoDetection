@@ -40,7 +40,7 @@ int get_binary_image(){
         
         //we can loop the video by re-opening the capture every time the video reaches its last frame
         
-        capture.open("video.mov");
+        capture.open("44_Natural.mov");
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";
@@ -77,7 +77,7 @@ int get_binary_image(){
             //threshold intensity image at a given sensitivity value
             cv::threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
             ////show the difference image and threshold image
-            cv::imshow("Difference Image",differenceImage);
+            //cv::imshow("Difference Image",differenceImage);
             //cv::imshow("Threshold Image", thresholdImage);
 
             //blur the image to get rid of the noise. This will output an intensity image
@@ -86,7 +86,7 @@ int get_binary_image(){
             threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
 
             //use_contours(thresholdImage);
-            vector<int> coord = use_houghLineTransform(thresholdImage);
+            vector<int> coord = use_houghLineTransform(thresholdImage, frame1);
             if(coord[0] != 10000){
                 myfile.open("data.txt", ios::app);
                 myfile << intToString(coord[0])+ " "+ intToString((-1*coord[1]))+"\n";
