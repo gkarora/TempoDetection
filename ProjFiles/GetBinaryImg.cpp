@@ -36,7 +36,7 @@ int get_binary_image(){
     //video capture object.
     VideoCapture capture;
     
-    while(1){
+  //  while(1){
         
         //we can loop the video by re-opening the capture every time the video reaches its last frame
         
@@ -54,7 +54,7 @@ int get_binary_image(){
         
         
         while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1){
-            
+
             //read first frame
             capture.read(frame1);
             //convert frame1 to gray scale for frame differencing
@@ -117,7 +117,7 @@ int get_binary_image(){
         }
         //release the capture before re-opening and looping again.
         capture.release();
-    }
+  //  }
     
     return 0;
     

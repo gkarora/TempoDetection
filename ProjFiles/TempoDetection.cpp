@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "GetBinaryImg.hpp"
+#include "getTempo.hpp"
 
 int main(int argc, const char* argv[])
 {
@@ -12,5 +13,6 @@ int main(int argc, const char* argv[])
 //    waitKey(0);
 //    
     get_binary_image();
+    getTempo();
 	return 0;
 }

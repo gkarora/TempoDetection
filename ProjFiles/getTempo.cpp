@@ -11,7 +11,7 @@
 #include <math.h>
 #include "simplelinear.hpp"
 
-std::ifstream infile("/Users/canmanie/Desktop/4A/461/Data/11data.txt");
+std::ifstream infile("data.txt");
 
 double sd;
 

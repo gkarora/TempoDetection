@@ -10,6 +10,7 @@
 #define getTempo_hpp
 
 #include <stdio.h>
+#include "stdafx.h"
 
 double getTempo();
 
