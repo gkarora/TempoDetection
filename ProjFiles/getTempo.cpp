@@ -11,22 +11,21 @@
 #include <math.h>
 #include "simplelinear.hpp"
 
-std::ifstream infile("/Users/canmanie/Desktop/4A/461/Data/11data.txt");
+std::ifstream infile("/Users/canmanie/Desktop/4A/461/Data/colourdata44-better.txt");
 
+double fps = 30.0;
 double sd;
+//double den = 4.0/4.0; //the denominator is the numerator of the time signature
 
-int findPeaks(double arr[], int n)
+int findPeaks(double arr[], int j)
 {
-    double sensitivity = sqrt(sd);
+    double sensitivity = sd/10.0;
     int count = 0;
-    //std::cout << "\nsd: " << sd <<"\n";
     
-    for (int i = 0; i < (n - 1); i++) {
+    for (int i = 0; i < (j - 1); i++) {
         if (i==0) continue;
         
-        if ((fabs(arr[i] - arr[i-1]) > sensitivity) && (fabs(arr[i]-arr[i+1]) > sensitivity)) {
-            std::cout << "max at ";
-            std::cout << i << "\n";
+        if ((arr[i] - arr[i-1] > sensitivity) && (arr[i]-arr[i+1] > sensitivity)) {
             count++;
         }
     }
@@ -35,10 +34,8 @@ int findPeaks(double arr[], int n)
 
 double getTempo() {
     int x,y;
-    int n = 2;
-    double fps = 24.2;
+    int n = 3;
     double a[n],b[n];
-    //MotionTrack();
     double slopes[sizeof(infile)*10];
     
     int index = 0;
@@ -53,14 +50,15 @@ double getTempo() {
         if (count%n==0) {
             double slope = linSlope(a,b,n);
             slopes[j]=slope;
-            //std::cout << slope << "\n";
             j++;
         }
         count++;
     }
     
-    sd = calcSD(slopes,n);
+    sd = calcSD(slopes,j);
     double peaks = findPeaks(slopes,j);
+    peaks = peaks;///den;
+    std::cout << "\nsd: " << sd <<"\n";
     std::cout << "Number of peaks: " << peaks << "\n";
     std::cout << "in " << count << " data points.\n";
     std::cout << "This means " << peaks/count <<" peaks per data point\n";

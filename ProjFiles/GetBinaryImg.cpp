@@ -40,7 +40,7 @@ int get_binary_image(){
         
         //we can loop the video by re-opening the capture every time the video reaches its last frame
         
-        capture.open("test_1.mov");
+        capture.open("video.mov");
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";

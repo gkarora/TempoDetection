@@ -14,19 +14,19 @@
 #include <cmath>
 using namespace std;
 
-double calcSD(double slopes[], int n){
+double calcSD(double slopes[], int j){
     double sd = 0;
     double mean = 0;
     double sum = 0;
     
-    for (int i = 0; i<n; i++) {
+    for (int i = 0; i<j; i++) {
         sum+=slopes[i];
     }
     
-    mean = sum/n;
+    mean = sum/j;
     
-    for (int i = 0; i<n; i++) {
-        sd = sqrt(pow((slopes[i]-mean),2)/(n-1));
+    for (int i = 0; i<j; i++) {
+        sd = sqrt(pow((slopes[i]-mean),2)/(j-1));
     }
     
     return sd;
