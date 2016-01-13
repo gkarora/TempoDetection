@@ -12,6 +12,6 @@
 #include <stdio.h>
 #include "stdafx.h"
 
-double getTempo();
+int getTempo();
 
 #endif /* getTempo_hpp */

@@ -31,7 +31,7 @@ int findPeaks(double arr[], int j)
     return count;
 }
 
-double getTempo() {
+int getTempo() {
     int x,y;
     int n = 5;
     double a[n],b[n];
@@ -59,13 +59,14 @@ double getTempo() {
     
     sd = calcSD(slopes,j);
     double peaks = findPeaks(slopes,j);
+    int bpm = int(peaks/count*fps*60.0*4.00);
     //peaks = peaks;//den;
     std::cout << "\nsd: " << sd <<"\n";
     std::cout << "Number of peaks: " << peaks << " out of " << j << " points\n";
     std::cout << "in " << count << " data points.\n";
     std::cout << "This means " << peaks/count <<" peaks per data point\n";
     std::cout << "And " << peaks/count*fps <<" peaks per second\n";
-    std::cout << "And " << peaks/count*fps*60.0 <<" beats per minute\n";
+    std::cout << "And " << bpm <<" beats per minute\n";
     
-    return 0;
+    return bpm;
 }
