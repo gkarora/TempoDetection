@@ -1,13 +1,19 @@
 //
 //  MotionTracking.cpp
 //  TempoDetection
+
 //
-//  Created by Gurneet Arora on 2015-11-26.
+//
+//  Based on:  objectTrackingTutorial.cpp written by  Kyle Hounslow 2013
+
 //  Copyright © 2015 Gurneet Arora. All rights reserved.
 //
 
 #include "GetBinaryImg.hpp"
 
+// Keep this consistent with getTempo.cpp
+const int QUEUESIZE = 60;
+const int RECALSIZE = 5;
 
 //our sensitivity value to be used in the absdiff() function
 const static int SENSITIVITY_VALUE = 20;
@@ -22,7 +28,7 @@ string intToString(int number)
 }
 
 int get_binary_image(){
-
+    int bpm = 0;
     bool pause = false;
     //set up the matrices that we will need
     //the two frames we will be comparing
@@ -35,6 +41,9 @@ int get_binary_image(){
     Mat thresholdImage;
     //video capture object.
     VideoCapture capture;
+   
+    queue<int> ypos = *new queue<int>;
+    int recal_counter = 0;
     
   //  while(1){
         
@@ -48,10 +57,10 @@ int get_binary_image(){
             return -1;
         }
 
-        ofstream myfile;
-        myfile.open ("data.txt", ios::trunc);
-        myfile.close();
-        vector<int> last = {0, 0};
+
+    
+        int last = 0;
+    
         bool first = true;
 
         while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1){
@@ -76,34 +85,44 @@ int get_binary_image(){
             cv::absdiff(grayImage1,grayImage2,differenceImage);
             //threshold intensity image at a given sensitivity value
             cv::threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
-            ////show the difference image and threshold image
-            //cv::imshow("Difference Image",differenceImage);
-            //cv::imshow("Threshold Image", thresholdImage);
+
 
             //blur the image to get rid of the noise. This will output an intensity image
             blur(thresholdImage,thresholdImage,cv::Size(BLUR_SIZE,BLUR_SIZE));
             //threshold again to obtain binary image from blur output
             threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
-
-            //use_contours(thresholdImage);
+            
+            //gkarora
             vector<int> coord = use_houghLineTransform(thresholdImage, frame1);
-            if(coord[0] != 10000){
-                myfile.open("data.txt", ios::app);
-                myfile << intToString(coord[0])+ " "+ intToString((-1*coord[1]))+"\n";
-                myfile.close();
-            }else {
-                myfile.open("data.txt", ios::app);
-                myfile << intToString(last[0])+ " "+ intToString(last[1])+"\n";
-                myfile.close();
+            
+            if(coord[1] != 10000){
+                ypos.push(coord[1]);
+                last = coord[1];
+                //cout<<(-1*coord[1])<<"\n";
+
+            } else {
+                ypos.push(last);
+               // cout<<(-1*last)<<"\n";
             }
-            last[0] = coord[0];
-            last[1] = coord[1];
-            //show our captured frame
-            //imshow("Frame1",frame1);
-            //check to see if a button has been pressed.
-            //this 10ms delay is necessary for proper operation of this program
-            //if removed, frames will not have enough time to referesh and a blank
-            //image will appear.
+            recal_counter++;
+            
+            
+            
+            //check is queue is full, if so, call getTempo
+            // recal_counter needs to be >= for first iteration, recal_counter will be 20
+            if (ypos.size() == QUEUESIZE){
+                if(recal_counter>=RECALSIZE){
+                    bpm = getTempo(ypos);
+                    recal_counter =0;
+
+                }
+            ypos.pop();
+
+            }
+           
+            
+            
+            ///@MELISSA: CONTROLS for pausing/escape, useful for UI later
             switch(waitKey(10)){
                     
                 case 27: //'esc' key has been pressed, exit program.
@@ -132,6 +151,7 @@ int get_binary_image(){
         //release the capture before re-opening and looping again.
         capture.release();
     
-    return 0;
+    // TO DO: this should return bpm dynamically
+    return 80;
 
 }

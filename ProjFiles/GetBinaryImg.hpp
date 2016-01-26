@@ -12,7 +12,9 @@
 #include <iostream>
 #include <fstream>
 #include "FindLine.h"
+#include "getTempo.hpp"
 #include <stdio.h>
+#include <queue>
 #endif
 
 //function declaration

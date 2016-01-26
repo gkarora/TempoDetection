@@ -11,7 +11,9 @@
 
 #include <stdio.h>
 #include "stdafx.h"
+#include <queue>
 
-int getTempo();
+
+int getTempo(std::queue<int> ypos);
 
 #endif /* getTempo_hpp */

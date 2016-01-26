@@ -9,21 +9,29 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <queue>
+
 #include "simplelinear.hpp"
 
-std::ifstream infile("data.txt");
+//keep consistent with GetBinaryImg.cpp
+const int QUEUESIZE = 60;
 
-double fps = 30.0;//24.02;//30.0;
+
+std::ifstream infile("colourdata44.txt");
+//std::ifstream infile("/Users/canmanie/Desktop/SYDE/4A/461/Data/11data.txt");
+
+double fps = 30.0;
 double sd;
 
 int findPeaks(double arr[], int j)
 {
-    double sensitivity = sd;//sqrt(sd);
+    double sensitivity = sd;
+    std::cout << "sd: " << sd << "\n";
     int count = 0;
     
     for (int i = 0; i < (j - 1); i++) {
         if (i==0) continue;
-        // || ((arr[i] - arr[i-1] > (-1.0)*sensitivity) && (arr[i]-arr[i+1] > (-1.0)*sensitivity))
+        
         if (((arr[i] - arr[i-1] > sensitivity) && (arr[i]-arr[i+1] > sensitivity))) {
             count++;
         }
@@ -31,42 +39,46 @@ int findPeaks(double arr[], int j)
     return count;
 }
 
-int getTempo() {
-    int x,y;
-    int n = 5;
-    double a[n],b[n];
-    double slopes[sizeof(infile)*10];
+int findDirectionChanges(std::queue<int> ypos)
+{
+    bool pos = false;
+    int count = 0;
+    int popped;
+    int peaked;
     
-    int index = 0;
-    int count = 1;
-    int j=0;
-    
-    while (infile >> x >> y)
-    {
-        a[index]=x;
-        b[index]=y;
+    for (int i = 0; i < QUEUESIZE-1; i++) {
         
-        if (count%n==0) {
-            double slope = linSlope(a,b,n);
-            std::cout << slope <<"\n";
-            slopes[j]=slope;
-            j++;
-            index = -1;
+        popped = ypos.front();
+        ypos.pop();
+        peaked = ypos.front();
+        
+        if (i==0) continue;
+        
+        if (pos) {
+            if (popped-peaked < 0) {
+                count++;
+                pos = false;
+            }
+        } else {
+            if (popped-peaked> 0) {
+                count++;
+                pos = true;
+            }
         }
-        count++;
-        index++;
     }
     
-    sd = calcSD(slopes,j);
-    double peaks = findPeaks(slopes,j);
-    int bpm = int(peaks/count*fps*60.0*4.00);
-    //peaks = peaks;//den;
-    std::cout << "\nsd: " << sd <<"\n";
-    std::cout << "Number of peaks: " << peaks << " out of " << j << " points\n";
-    std::cout << "in " << count << " data points.\n";
-    std::cout << "This means " << peaks/count <<" peaks per data point\n";
-    std::cout << "And " << peaks/count*fps <<" peaks per second\n";
-    std::cout << "And " << bpm <<" beats per minute\n";
+    return count;
+}
+
+int getTempo(std::queue<int> ypos) {
     
-    return bpm;
+    double peaks = findDirectionChanges(ypos);
+    int tempo = floor((60.0*peaks*fps)/(2*QUEUESIZE));
+    std::cout << "Number of peaks and troughs: " << peaks << " out of " << QUEUESIZE << " points\n";
+    std::cout << "Tempo: " << tempo << "\n" ;
+    //one data point per frame at 30 frames per second, 428/30 = 14.267 seconds long
+    //80 bpm = 1.3333 beats per second
+    //expecting to find
+    
+    return tempo;
 }
