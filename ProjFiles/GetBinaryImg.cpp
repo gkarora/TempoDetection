@@ -44,12 +44,8 @@ int get_binary_image(){
    
     queue<int> ypos = *new queue<int>;
     int recal_counter = 0;
-    
-  //  while(1){
         
-        //we can loop the video by re-opening the capture every time the video reaches its last frame
-        
-        capture.open("44_paperbaton.mov");
+    capture.open(0);
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";
@@ -61,7 +57,7 @@ int get_binary_image(){
     
         bool first = true;
 
-        while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1){
+    while(1) {
 
             if(first){
                 //read first frame
