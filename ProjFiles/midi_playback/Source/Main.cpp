@@ -16,8 +16,8 @@
 
 int get_bpm()
 {
-  int bpm = get_binary_image();
-   // int bpm = getTempo();
+    int bpm = get_binary_image();
+    //int bpm = getTempo();
     return bpm;
 }
 

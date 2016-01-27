@@ -49,15 +49,13 @@ int get_binary_image(){
         
         //we can loop the video by re-opening the capture every time the video reaches its last frame
         
-        capture.open("44_Natural.mov");
+        capture.open("44_paperbaton.mov");
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";
             getchar();
             return -1;
         }
-
-
     
         int last = 0;
     
@@ -98,15 +96,11 @@ int get_binary_image(){
             if(coord[1] != 10000){
                 ypos.push(coord[1]);
                 last = coord[1];
-                //cout<<(-1*coord[1])<<"\n";
 
             } else {
                 ypos.push(last);
-               // cout<<(-1*last)<<"\n";
             }
             recal_counter++;
-            
-            
             
             //check is queue is full, if so, call getTempo
             // recal_counter needs to be >= for first iteration, recal_counter will be 20
@@ -119,8 +113,6 @@ int get_binary_image(){
             ypos.pop();
 
             }
-           
-            
             
             ///@MELISSA: CONTROLS for pausing/escape, useful for UI later
             switch(waitKey(10)){

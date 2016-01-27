@@ -11,58 +11,57 @@
 #include <math.h>
 #include <queue>
 
-#include "simplelinear.hpp"
-
 //keep consistent with GetBinaryImg.cpp
 const int QUEUESIZE = 60;
-
-
-std::ifstream infile("colourdata44.txt");
-//std::ifstream infile("/Users/canmanie/Desktop/SYDE/4A/461/Data/11data.txt");
 
 double fps = 30.0;
 double sd;
 
-int findPeaks(double arr[], int j)
+//will take running average of every three
+std::vector<int> smoothData(std::queue<int> orig)
 {
-    double sensitivity = sd;
-    std::cout << "sd: " << sd << "\n";
-    int count = 0;
+    std::vector<int> smoothed(QUEUESIZE-2);
+    int a=orig.front();
+    orig.pop();
+    int b=orig.front();
+    orig.pop();
+    int c = 0;
+    int average = 0;
     
-    for (int i = 0; i < (j - 1); i++) {
-        if (i==0) continue;
+    for (int i = 0; i < QUEUESIZE-2; i++) {
+        c = orig.front();
+        orig.pop();
         
-        if (((arr[i] - arr[i-1] > sensitivity) && (arr[i]-arr[i+1] > sensitivity))) {
-            count++;
-        }
+        average = (a+b+c)/3;
+        smoothed.at(i)=average;
+        a=b;
+        b=c;
     }
-    return count;
+    
+    return smoothed;
 }
 
-int findDirectionChanges(std::queue<int> ypos)
+int findDirectionChanges(std::vector<int> pos)
 {
-    bool pos = false;
+    bool positive = false;
     int count = 0;
-    int popped;
-    int peaked;
     
-    for (int i = 0; i < QUEUESIZE-1; i++) {
+    for (int i = 0; i < sizeof(pos); i++) {
         
-        popped = ypos.front();
-        ypos.pop();
-        peaked = ypos.front();
+        if (i==0) {
+            positive = pos[i]-pos[i-1] > 0;
+            continue;
+        }
         
-        if (i==0) continue;
-        
-        if (pos) {
-            if (popped-peaked < 0) {
+        if (positive) {
+            if (pos[i]-pos[i-1] < 0) {
                 count++;
-                pos = false;
+                positive = false;
             }
         } else {
-            if (popped-peaked> 0) {
+            if (pos[i]-pos[i-1] > 0) {
                 count++;
-                pos = true;
+                positive = true;
             }
         }
     }
@@ -71,14 +70,9 @@ int findDirectionChanges(std::queue<int> ypos)
 }
 
 int getTempo(std::queue<int> ypos) {
-    
-    double peaks = findDirectionChanges(ypos);
+    std::vector<int> smoothed = smoothData(ypos);
+    double peaks = findDirectionChanges(smoothed);
     int tempo = floor((60.0*peaks*fps)/(2*QUEUESIZE));
-    std::cout << "Number of peaks and troughs: " << peaks << " out of " << QUEUESIZE << " points\n";
-    std::cout << "Tempo: " << tempo << "\n" ;
-    //one data point per frame at 30 frames per second, 428/30 = 14.267 seconds long
-    //80 bpm = 1.3333 beats per second
-    //expecting to find
-    
+    std::cout << tempo << "\n";
     return tempo;
 }
