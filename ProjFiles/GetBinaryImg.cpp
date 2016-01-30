@@ -45,7 +45,7 @@ int get_binary_image(){
     queue<int> ypos = *new queue<int>;
     int recal_counter = 0;
         
-    capture.open(0);
+    capture.open("44_Natural.mov");
         
         if(!capture.isOpened()){
             cout<<"ERROR ACQUIRING VIDEO FEED\n";
@@ -57,7 +57,7 @@ int get_binary_image(){
     
         bool first = true;
 
-    while(1) {
+    while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1) {
 
             if(first){
                 //read first frame
