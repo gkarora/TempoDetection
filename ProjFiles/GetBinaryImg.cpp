@@ -10,6 +10,7 @@
 //
 
 #include "GetBinaryImg.hpp"
+extern int currentBpm;
 
 // Keep this consistent with getTempo.cpp
 const int QUEUESIZE = 60;
@@ -28,7 +29,6 @@ string intToString(int number)
 }
 
 int get_binary_image(){
-    int bpm = 0;
     bool pause = false;
     //set up the matrices that we will need
     //the two frames we will be comparing
@@ -100,15 +100,23 @@ int get_binary_image(){
             
             //check is queue is full, if so, call getTempo
             // recal_counter needs to be >= for first iteration, recal_counter will be 20
-            if (ypos.size() == QUEUESIZE){
-                if(recal_counter>=RECALSIZE){
-                    bpm = getTempo(ypos);
-                    recal_counter =0;
-
+        if (ypos.size() == QUEUESIZE){
+            if(recal_counter>=RECALSIZE){
+                int newTempo = getTempo(ypos);
+                if (newTempo > 200) {
+                    currentBpm = 200;
                 }
-            ypos.pop();
+                else {
+                    currentBpm = newTempo;
+                }
+                recal_counter =0;
+                std::cout << currentBpm << ", ";
 
             }
+            ypos.pop();
+            
+            
+        }
             
             ///@MELISSA: CONTROLS for pausing/escape, useful for UI later
             switch(waitKey(10)){
@@ -139,7 +147,6 @@ int get_binary_image(){
         //release the capture before re-opening and looping again.
         capture.release();
     
-    // TO DO: this should return bpm dynamically
-    return 80;
+    return 0;
 
 }
