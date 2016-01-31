@@ -159,7 +159,6 @@ int get_binary_image(){
         counter++;
         sec = difftime(end, start);
         fps = counter/sec;
-        printf("%.2f fps\n", fps);
         // overflow protection
         if (counter == (INT_MAX - 1000))
             counter = 0;

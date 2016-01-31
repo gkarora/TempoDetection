@@ -20,14 +20,8 @@ vector<int> use_houghLineTransform(Mat src, Mat org)
         return ret;
     }
     
-   // resize(src, src, Size(350,500));
-    //blur(src, src, Size(4, 4));
-    
     //Canny Edge Detector
     Canny(src, dst, 50, 200, 3);
-	//cvtColor(dst, cdst, CV_GRAY2BGR);
-   
-
 
     vector<Vec4i> lines;
     HoughLinesP(dst, lines, 1, CV_PI / 180, 50, 50, 10);
@@ -57,29 +51,4 @@ vector<int> use_houghLineTransform(Mat src, Mat org)
     
     imshow("Prob Hough Line Transform", org);
     return max_cord;
-}
-
-
-/** contours -- not used */
-int use_contours(Mat src)
-{
-	if (!src.data || src.empty())
-	{
-		return -1;
-	}
-
-	vector<Vec4i> hierarchy;
-	vector<vector<Point> > contours;
-	/// Convert the image to grayscale
-	resize(src, src, Size (350, 500));
-
-	//cvtColor(src, src_gray, CV_BGR2GRAY);
-	blur(src, src_gray, Size(3, 3));
-	findContours(src_gray, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
-
-
-	imshow("contoured", src_gray);
-
-    return 0;
-
 }
