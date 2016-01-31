@@ -64,9 +64,14 @@ int get_binary_image(){
                 capture.read(frame1);
                 //copy second frame
                 capture.read(frame2);
+                //SKIPPING frame 2
+                capture.read(frame2);
+                
                 first = false;
             }else{
                 frame2.copyTo(frame1);
+                capture.read(frame2);
+                //skipping frame 2
                 capture.read(frame2);
             }
             //convert frame1 to gray scale for frame differencing
