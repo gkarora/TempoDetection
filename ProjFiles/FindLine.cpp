@@ -19,17 +19,13 @@ vector<int> use_houghLineTransform(Mat src, Mat org)
         return ret;
     }
     
-   // resize(src, src, Size(350,500));
-    //blur(src, src, Size(4, 4));
-    
-    Mat element = getStructuringElement(MORPH_RECT, Size(15, 15), Point(1, 1) );
-    
-    erode(src,dst0,element);
-    
-    imshow("eroded",dst0);
+// Leave this here to adjust for lighting conditions
+//    Mat element = getStructuringElement(MORPH_RECT, Size(15, 15), Point(1, 1) );
+//    erode(src,dst0,element);
+//    imshow("eroded",dst0);
     
     //Canny Edge Detector
-    Canny(dst0, dst1, 50, 200, 3);
+    Canny(src, dst1, 50, 200, 3);
 	//cvtColor(dst, cdst, CV_GRAY2BGR);
 
     vector<Vec4i> lines;
