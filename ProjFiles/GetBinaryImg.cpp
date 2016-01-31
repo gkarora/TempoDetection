@@ -41,68 +41,83 @@ int get_binary_image(){
     Mat thresholdImage;
     //video capture object.
     VideoCapture capture;
-   
+    
     queue<int> ypos = *new queue<int>;
     int recal_counter = 0;
-        
+    
     capture.open("44_Natural.mov");
         
-        if(!capture.isOpened()){
-            cout<<"ERROR ACQUIRING VIDEO FEED\n";
-            getchar();
-            return -1;
-        }
+    if(!capture.isOpened()){
+        cout<<"ERROR ACQUIRING VIDEO FEED\n";
+        getchar();
+        return -1;
+    }
     
-        int last = 0;
+    int last = 0;
     
-        bool first = true;
+    bool first = true;
+    
+    // fps counter begin
+    time_t start, end;
+    int counter = 0;
+    double sec;
+    double fps;
+    // fps counter end
+    
 
     while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1) {
+        // fps counter begin
+        if (counter == 0){
+            time(&start);
+        }
+        // fps counter end
+        
+        if(first){
+            //read first frame
+            capture.read(frame1);
+            //copy second frame
+            capture.read(frame2);
+            capture.read(frame2);
+            first = false;
+        }else{
+            frame2.copyTo(frame1);
+            capture.read(frame2);
+            capture.read(frame2);
+        }
+        //convert frame1 to gray scale for frame differencing
+        cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
+        
+        //convert frame2 to gray scale for frame differencing
+        cv::cvtColor(frame2,grayImage2,COLOR_BGR2GRAY);
+        //perform frame differencing with the sequential images. This will output an "intensity image"
+        //do not confuse this with a threshold image, we will need to perform thresholding afterwards.
+        cv::absdiff(grayImage1,grayImage2,differenceImage);
+        //threshold intensity image at a given sensitivity value
+        cv::threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
+        
+        
+        //blur the image to get rid of the noise. This will output an intensity image
+        blur(thresholdImage,thresholdImage,cv::Size(BLUR_SIZE,BLUR_SIZE));
+        //threshold again to obtain binary image from blur output
+        threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
+        
+        //gkarora
+        vector<int> coord = use_houghLineTransform(thresholdImage, frame1);
+        
+        if(coord[1] != 10000){
+            ypos.push(coord[1]);
+            last = coord[1];
+        } else {
+            ypos.push(last);
+        }
+        recal_counter++;
+        
+        //check is queue is full, if so, call getTempo
+        // recal_counter needs to be >= for first iteration, recal_counter will be 20
 
-            if(first){
-                //read first frame
-                capture.read(frame1);
-                //copy second frame
-                capture.read(frame2);
-                first = false;
-            }else{
-                frame2.copyTo(frame1);
-                capture.read(frame2);
-            }
-            //convert frame1 to gray scale for frame differencing
-            cv::cvtColor(frame1,grayImage1,COLOR_BGR2GRAY);
-
-            //convert frame2 to gray scale for frame differencing
-            cv::cvtColor(frame2,grayImage2,COLOR_BGR2GRAY);
-            //perform frame differencing with the sequential images. This will output an "intensity image"
-            //do not confuse this with a threshold image, we will need to perform thresholding afterwards.
-            cv::absdiff(grayImage1,grayImage2,differenceImage);
-            //threshold intensity image at a given sensitivity value
-            cv::threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
-
-
-            //blur the image to get rid of the noise. This will output an intensity image
-            blur(thresholdImage,thresholdImage,cv::Size(BLUR_SIZE,BLUR_SIZE));
-            //threshold again to obtain binary image from blur output
-            threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
-            
-            //gkarora
-            vector<int> coord = use_houghLineTransform(thresholdImage, frame1);
-            
-            if(coord[1] != 10000){
-                ypos.push(coord[1]);
-                last = coord[1];
-
-            } else {
-                ypos.push(last);
-            }
-            recal_counter++;
-            
-            //check is queue is full, if so, call getTempo
-            // recal_counter needs to be >= for first iteration, recal_counter will be 20
         if (ypos.size() == QUEUESIZE){
             if(recal_counter>=RECALSIZE){
-                int newTempo = getTempo(ypos);
+                int newTempo = getTempo(ypos, fps);
                 if (newTempo > 200) {
                     currentBpm = 200;
                 }
@@ -111,42 +126,49 @@ int get_binary_image(){
                 }
                 recal_counter =0;
                 std::cout << currentBpm << ", ";
-
+                
             }
             ypos.pop();
             
             
         }
-            
-            ///@MELISSA: CONTROLS for pausing/escape, useful for UI later
-            switch(waitKey(10)){
-                    
-                case 27: //'esc' key has been pressed, exit program.
-                    return 0;
-
-                case 112: //'p' has been pressed. this will pause/resume the code.
-                    pause = !pause;
-                    if(pause == true){ cout<<"Code paused, press 'p' again to resume"<<endl;
-                        while (pause == true){
-                            //stay in this loop until 
-                            switch (waitKey()){
-                                    //a switch statement inside a switch statement? Mind blown.
-                                case 112: 
-                                    //change pause back to false
-                                    pause = false;
-                                    cout<<"Code Resumed"<<endl;
-                                    break;
-                            }
+        
+        ///@MELISSA: CONTROLS for pausing/escape, useful for UI later
+        switch(waitKey(10)){
+                
+            case 27: //'esc' key has been pressed, exit program.
+                return 0;
+                
+            case 112: //'p' has been pressed. this will pause/resume the code.
+                pause = !pause;
+                if(pause == true){ cout<<"Code paused, press 'p' again to resume"<<endl;
+                    while (pause == true){
+                        //stay in this loop until
+                        switch (waitKey()){
+                                //a switch statement inside a switch statement? Mind blown.
+                            case 112:
+                                //change pause back to false
+                                pause = false;
+                                cout<<"Code Resumed"<<endl;
+                                break;
                         }
                     }
-                    
-                    
-                    
-            }
+                }
         }
-        //release the capture before re-opening and looping again.
-        capture.release();
+        
+        // fps counter begin
+        time(&end);
+        counter++;
+        sec = difftime(end, start);
+        fps = counter/sec;
+        // overflow protection
+        if (counter == (INT_MAX - 1000))
+            counter = 0;
+        // fps counter end
+    }
+    //release the capture before re-opening and looping again.
+    capture.release();
     
     return 0;
-
+    
 }
