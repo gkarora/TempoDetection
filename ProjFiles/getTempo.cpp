@@ -13,8 +13,6 @@
 
 //keep consistent with GetBinaryImg.cpp
 const int QUEUESIZE = 60;
-
-double fps = 30.0;
 double sd;
 
 //will take running average of every three
@@ -69,7 +67,7 @@ int findDirectionChanges(std::vector<int> pos)
     return count;
 }
 
-int getTempo(std::queue<int> ypos) {
+int getTempo(std::queue<int> ypos, double fps) {
     std::vector<int> smoothed = smoothData(ypos);
     double peaks = findDirectionChanges(smoothed);
     int tempo = floor((60.0*peaks*fps)/(2*QUEUESIZE));

@@ -14,6 +14,6 @@
 #include <queue>
 
 
-int getTempo(std::queue<int> ypos);
+int getTempo(std::queue<int> ypos, double fps);
 
 #endif /* getTempo_hpp */

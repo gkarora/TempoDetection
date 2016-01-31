@@ -23,10 +23,6 @@ Prereq: Jucer
 3. Add the files in the 'ProjectFiles` (not in midi_playback folder) into XCode project at the blue folder level.
 4. Save
 5. Set up OpenCV
-5. Set up OpenCV
-5. Set up OpenCV
-5. Set up OpenCV
-5. Set up OpenCV
 
 Mac To Run:
 
