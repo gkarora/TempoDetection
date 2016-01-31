@@ -46,7 +46,7 @@ int get_binary_image(){
     int recal_counter = 0;
     
     capture.open(0);
-    
+
     if(!capture.isOpened()){
         cout<<"ERROR ACQUIRING VIDEO FEED\n";
         getchar();
@@ -158,8 +158,9 @@ int get_binary_image(){
         time(&end);
         counter++;
         sec = difftime(end, start);
-        fps = counter/sec;
-        printf("%.2f fps\n", fps);
+        fps = counter/sec*3;
+        //printf("%.2f fps\n", fps);
+        
         // overflow protection
         if (counter == (INT_MAX - 1000))
             counter = 0;

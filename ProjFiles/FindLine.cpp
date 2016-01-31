@@ -2,7 +2,7 @@
 #include "FindLine.h"
 
 Mat src_resize, src_gray;
-Mat dst, cdst, pdst, dst2;
+Mat dst0, dst1, cdst, pdst, dst2;
 
 int edgeThresh = 1;
 int lowThreshold = 1;
@@ -10,7 +10,6 @@ int maxThreshold = 255;
 
 int ratio = 3;
 int kernel_size = 3;
-
 
 vector<int> use_houghLineTransform(Mat src, Mat org)
 {
@@ -23,14 +22,18 @@ vector<int> use_houghLineTransform(Mat src, Mat org)
    // resize(src, src, Size(350,500));
     //blur(src, src, Size(4, 4));
     
+    Mat element = getStructuringElement(MORPH_RECT, Size(15, 15), Point(1, 1) );
+    
+    erode(src,dst0,element);
+    
+    imshow("eroded",dst0);
+    
     //Canny Edge Detector
-    Canny(src, dst, 50, 200, 3);
+    Canny(dst0, dst1, 50, 200, 3);
 	//cvtColor(dst, cdst, CV_GRAY2BGR);
-   
-
 
     vector<Vec4i> lines;
-    HoughLinesP(dst, lines, 1, CV_PI / 180, 50, 50, 10);
+    HoughLinesP(dst1, lines, 1, CV_PI / 180, 50, 50, 10);
     
 
     vector<int> max_cord = {10000, 10000};
@@ -58,7 +61,6 @@ vector<int> use_houghLineTransform(Mat src, Mat org)
     imshow("Prob Hough Line Transform", org);
     return max_cord;
 }
-
 
 /** contours -- not used */
 int use_contours(Mat src)
