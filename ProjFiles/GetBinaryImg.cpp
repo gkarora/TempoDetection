@@ -46,7 +46,7 @@ int get_binary_image(){
     int recal_counter = 0;
     
     capture.open("44_Natural.mov");
-        
+
     if(!capture.isOpened()){
         cout<<"ERROR ACQUIRING VIDEO FEED\n";
         getchar();
@@ -92,15 +92,12 @@ int get_binary_image(){
         //perform frame differencing with the sequential images. This will output an "intensity image"
         //do not confuse this with a threshold image, we will need to perform thresholding afterwards.
         cv::absdiff(grayImage1,grayImage2,differenceImage);
-        //threshold intensity image at a given sensitivity value
-        cv::threshold(differenceImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
-        
         
         //blur the image to get rid of the noise. This will output an intensity image
-        blur(thresholdImage,thresholdImage,cv::Size(BLUR_SIZE,BLUR_SIZE));
+        cv::blur(differenceImage,thresholdImage,cv::Size(BLUR_SIZE,BLUR_SIZE));
         //threshold again to obtain binary image from blur output
-        threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
-        
+        cv::threshold(thresholdImage,thresholdImage,SENSITIVITY_VALUE,255,THRESH_BINARY);
+
         //gkarora
         vector<int> coord = use_houghLineTransform(thresholdImage, frame1);
         
@@ -160,7 +157,7 @@ int get_binary_image(){
         time(&end);
         counter++;
         sec = difftime(end, start);
-        fps = counter/sec;
+        fps = counter/sec*3;
         // overflow protection
         if (counter == (INT_MAX - 1000))
             counter = 0;
