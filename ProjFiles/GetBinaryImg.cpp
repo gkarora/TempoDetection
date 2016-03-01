@@ -45,7 +45,7 @@ int get_binary_image(){
     queue<int> ypos = *new queue<int>;
     int recal_counter = 0;
     
-    capture.open(0);
+    capture.open("44_Natural.mov");
 
     if(!capture.isOpened()){
         cout<<"ERROR ACQUIRING VIDEO FEED\n";
@@ -64,7 +64,8 @@ int get_binary_image(){
     double fps;
     // fps counter end
     
-    while(1) {
+
+    while(capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT)-1) {
         // fps counter begin
         if (counter == 0){
             time(&start);
@@ -110,6 +111,7 @@ int get_binary_image(){
         
         //check is queue is full, if so, call getTempo
         // recal_counter needs to be >= for first iteration, recal_counter will be 20
+
         if (ypos.size() == QUEUESIZE){
             if(recal_counter>=RECALSIZE){
                 int newTempo = getTempo(ypos, fps);
