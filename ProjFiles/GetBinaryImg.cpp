@@ -41,6 +41,7 @@ int get_binary_image(){
     Mat thresholdImage;
     //video capture object.
     VideoCapture capture;
+    int tempo = 80;
     
     queue<int> ypos = *new queue<int>;
     int recal_counter = 0;
@@ -112,12 +113,16 @@ int get_binary_image(){
         // recal_counter needs to be >= for first iteration, recal_counter will be 20
         if (ypos.size() == QUEUESIZE){
             if(recal_counter>=RECALSIZE){
-                int newTempo = getTempo(ypos, fps);
-                if (newTempo > 200) {
+                int oldTempo = tempo;
+                tempo = getTempo(ypos, fps);
+                if (tempo > 200) {
                     currentBpm = 200;
                 }
+                else if (tempo<=0){
+                    currentBpm = oldTempo;
+                }
                 else {
-                    currentBpm = newTempo;
+                    currentBpm = tempo;
                 }
                 recal_counter =0;
                 std::cout << currentBpm << ", ";
