@@ -70,6 +70,6 @@ int findDirectionChanges(std::vector<int> pos)
 int getTempo(std::queue<int> ypos, double fps) {
     std::vector<int> smoothed = smoothData(ypos);
     double peaks = findDirectionChanges(smoothed);
-    int tempo = floor((60.0*peaks*fps)/(2*QUEUESIZE));
+    int tempo = floor((60.0*peaks*fps)/(1.7677*QUEUESIZE));
     return tempo;
 }
