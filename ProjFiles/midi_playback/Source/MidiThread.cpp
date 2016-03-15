@@ -7,7 +7,6 @@
 using namespace std;
 
 extern int currentBpm;
-
 MidiThread::MidiThread(MainContentComponent *contentComponent,
 		MidiMessageSequence sequence,
 		short origPpq,
@@ -108,3 +107,4 @@ void MidiThread::run() {
 	delete midiPort;
 	return;
 }
+
