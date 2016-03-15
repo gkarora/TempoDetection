@@ -1,14 +1,24 @@
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MainComponent.h"
+#include <map>
 
 class MidiThread : public juce::Thread {
 public:
-	MidiThread();
+	MidiThread(MainContentComponent *contentComponent,
+		MidiMessageSequence midiSequence,
+		short origPpq,
+		std::map<double, double> tempoMap,
+		std::map<double, std::pair<int, int>> timeSigMap);
 	void run() override;
 
 private:
 	MidiOutput* midiPort;
 	File inputFile;
 	MidiFile midi;
+	MidiFile click;
+	short ppq;
 	MidiMessageSequence midiSequence;
-	MidiMessageCollector messageCollector;
+	std::map<double, double> tempos;
+	std::map<double, std::pair<int, int>> timeSigs;
+	MainContentComponent *content;
 };

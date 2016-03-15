@@ -9,7 +9,6 @@
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MidiThread.h"
 
 int currentBpm(120);
 
@@ -32,11 +31,6 @@ public:
 		// This method is where you should put your application's initialisation code..
 
 		mainWindow = new MainWindow(getApplicationName());
-
-		//preprocessMidi();
-
-		MidiThread *midiThread = new MidiThread();
-		midiThread->startThread();
 	}
 
 	void shutdown() override
