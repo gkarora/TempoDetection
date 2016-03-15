@@ -2,7 +2,7 @@
 
 class MidiThread : public juce::Thread {
 public:
-	MidiThread(int target);
+	MidiThread();
 	void run() override;
 
 private:
@@ -11,5 +11,4 @@ private:
 	MidiFile midi;
 	MidiMessageSequence midiSequence;
 	MidiMessageCollector messageCollector;
-    int targetBpm;
 };

@@ -6,97 +6,112 @@
   ==============================================================================
 */
 
-#ifndef MAINCOMPONENT_H_INCLUDED
-#define MAINCOMPONENT_H_INCLUDED
+
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MainComponent.h"
+#include "BbtThread.h"
+#include "Windows.h"
+#include <conio.h>
+#include <thread>
+using namespace std;
 
-//==============================================================================
-/*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
-class MainContentComponent   : public AudioAppComponent
-{
-public:
-    //==============================================================================
-    MainContentComponent()
-    {
-        setSize (800, 600);
+extern int currentBpm;
+extern std::string bbt;
 
-        // specify the number of input and output channels that we want to open
-        setAudioChannels (2, 2);
-    }
+MainContentComponent::MainContentComponent() {
+	setSize(800, 600);
+	bpmLabel.setText(String(currentBpm), dontSendNotification);
+	bpmLabel.setColour(Label::backgroundColourId, Colours::black);
+	bpmLabel.setColour(Label::textColourId, Colours::white);
+	bpmLabel.setJustificationType(Justification::centred);
+	bpmLabel.setBounds(0, 0, 800, 200);
+	addAndMakeVisible(bpmLabel);
 
-    ~MainContentComponent()
-    {
-        shutdownAudio();
-    }
+	bbtLabel.setText(String("00:00:000"), dontSendNotification);
+	bbtLabel.setColour(Label::backgroundColourId, Colours::black);
+	bbtLabel.setColour(Label::textColourId, Colours::white);
+	bbtLabel.setJustificationType(Justification::centred);
+	bbtLabel.setBounds(0, 200, 800, 200);
+	addAndMakeVisible(bbtLabel);
+	BbtThread *bbtThread = new BbtThread(&bbtLabel);
+	bbtThread->startThread();
 
-    //=======================================================================
-    void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
-    {
-        // This function will be called when the audio device is started, or when
-        // its settings (i.e. sample rate, block size, etc) are changed.
+	addAndMakeVisible(decButton);
+	decButton.setButtonText("-");
+	decButton.setColour(TextButton::textColourOffId, Colours::black);
+	decButton.setBounds(0, 400, 400, 200);
+	decButton.addListener(this);
+	addAndMakeVisible(incButton);
+	incButton.setButtonText("+");
+	incButton.setColour(TextButton::textColourOffId, Colours::black);
+	incButton.setBounds(400, 400, 400, 200);
+	incButton.addListener(this);
 
-        // You can use this function to initialise any resources you might need,
-        // but be careful - it will be called on the audio thread, not the GUI thread.
+	// specify the number of input and output channels that we want to open
+	setAudioChannels(2, 2);
+}
 
-        // For more details, see the help for AudioProcessor::prepareToPlay()
-    }
+MainContentComponent::~MainContentComponent() {
+	shutdownAudio();
+}
 
-    void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
-    {
-        // Your audio-processing code goes here!
+void MainContentComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate) {
+	// This function will be called when the audio device is started, or when
+	// its settings (i.e. sample rate, block size, etc) are changed.
 
-        // For more details, see the help for AudioProcessor::getNextAudioBlock()
+	// You can use this function to initialise any resources you might need,
+	// but be careful - it will be called on the audio thread, not the GUI thread.
 
-        // Right now we are not producing any data, in which case we need to clear the buffer
-        // (to prevent the output of random noise)
-        bufferToFill.clearActiveBufferRegion();
-    }
+	// For more details, see the help for AudioProcessor::prepareToPlay()
+}
 
-    void releaseResources() override
-    {
-        // This will be called when the audio device stops, or when it is being
-        // restarted due to a setting change.
+void MainContentComponent::getNextAudioBlock(const AudioSourceChannelInfo& bufferToFill) {
+	// Your audio-processing code goes here!
 
-        // For more details, see the help for AudioProcessor::releaseResources()
-    }
+	// For more details, see the help for AudioProcessor::getNextAudioBlock()
 
-    //=======================================================================
-//    void paint (Graphics& g) override
-    //gkarora: have something that looks like a playback track
-//    {
-//        // (Our component is opaque, so we must completely fill the background with a solid colour)
-//        g.fillAll (Colours::black);
-//		g.setColour(Colours::white);
-//		g.drawText(currentSizeAsString, getLocalBounds(), Justification::centred);
-//
-//        // You can add your drawing code here!
-//    }
+	// Right now we are not producing any data, in which case we need to clear the buffer
+	// (to prevent the output of random noise)
+	bufferToFill.clearActiveBufferRegion();
+}
 
-//    void resized() override
-//    {
-//        // This is called when the MainContentComponent is resized.
-//        // If you add any child components, this is where you should
-//        // update their positions.
-//		currentSizeAsString = String(getWidth()) + "x" + String(getHeight());
-//    }
+void MainContentComponent::releaseResources() {
+	// This will be called when the audio device stops, or when it is being
+	// restarted due to a setting change.
 
+	// For more details, see the help for AudioProcessor::releaseResources()
+}
 
-private:
-    //==============================================================================
+//=======================================================================
+void MainContentComponent::paint(Graphics& g) {
+	// (Our component is opaque, so we must completely fill the background with a solid colour)
+	//g.fillAll (Colours::black);
+	//g.setColour(Colours::white);
+	//g.drawText(String(currentBpm), getLocalBounds(), Justification::centred);
 
-    // Your private member variables go here...
-	String currentSizeAsString;
+	// You can add your drawing code here!
+}
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
-};
+void MainContentComponent::resized() {
+	// This is called when the MainContentComponent is resized.
+	// If you add any child components, this is where you should
+	// update their positions.
+	currentSizeAsString = String(getWidth()) + "x" + String(getHeight());
+}
 
+void MainContentComponent::buttonClicked(Button* button) {
+	if (button == &incButton) {
+		currentBpm = currentBpm + 5;
+		bpmLabel.setText(String(currentBpm), dontSendNotification);
+	}
+	else if (button == &decButton) {
+		currentBpm = currentBpm - 5;
+		bpmLabel.setText(String(currentBpm), dontSendNotification);
+	}
+}
 
 // (This function is called by the app startup code to create our main component)
-Component* createMainContentComponent()     { return new MainContentComponent(); }
-
-
-#endif  // MAINCOMPONENT_H_INCLUDED
+Component* createMainContentComponent() {
+	return new MainContentComponent();
+}
