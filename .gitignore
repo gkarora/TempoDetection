@@ -49,6 +49,7 @@ Temporary Items
 # =========================
 ProjFiles/midi_playback/Builds/
 ProjFiles/midi_playback/JuceLibraryCode/
+ProjFiles/midi_playback/Source/
 
 #VS runtime dirs need to be ignored
 /Debug/*
