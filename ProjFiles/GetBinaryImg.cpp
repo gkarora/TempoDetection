@@ -9,6 +9,7 @@
 //
 
 #include "GetBinaryImg.hpp"
+#include <ctime>
 extern int currentBpm;
 
 // Keep this consistent with getTempo.cpp

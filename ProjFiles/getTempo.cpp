@@ -47,7 +47,7 @@ int findDirectionChanges(std::vector<int> pos)
     for (int i = 0; i < sizeof(pos); i++) {
         
         if (i==0) {
-            positive = pos[i]-pos[i-1] > 0;
+            //positive = pos[i]-pos[i-1] > 0;
             continue;
         }
         

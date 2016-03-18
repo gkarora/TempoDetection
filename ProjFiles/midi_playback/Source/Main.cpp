@@ -8,6 +8,9 @@
   ==============================================================================
 */
 
+#include "../../stdafx.h"
+#include "../../GetBinaryImg.hpp"
+#include <thread>
 #include "../JuceLibraryCode/JuceHeader.h"
 
 int currentBpm(120);
@@ -21,16 +24,18 @@ public:
 	//==============================================================================
 	MidiPlaybackApplication() {}
 
-	const String getApplicationName() override { return ProjectInfo::projectName; }
-	const String getApplicationVersion() override { return ProjectInfo::versionString; }
+	const juce::String getApplicationName() override { return ProjectInfo::projectName; }
+	const juce::String getApplicationVersion() override { return ProjectInfo::versionString; }
 	bool moreThanOneInstanceAllowed() override { return true; }
 
 	//==============================================================================
-	void initialise(const String& commandLine) override
+	void initialise(const juce::String& commandLine) override
 	{
 		// This method is where you should put your application's initialisation code..
 
 		mainWindow = new MainWindow(getApplicationName());
+		std::thread t(get_binary_image);
+		t.detach();
 	}
 
 	void shutdown() override
@@ -48,7 +53,7 @@ public:
 		quit();
 	}
 
-	void anotherInstanceStarted(const String& commandLine) override
+	void anotherInstanceStarted(const juce::String& commandLine) override
 	{
 		// When another instance of the app is launched while this one is running,
 		// this method is invoked, and the commandLine parameter tells you what
@@ -63,7 +68,7 @@ public:
 	class MainWindow : public DocumentWindow
 	{
 	public:
-		MainWindow(String name) : DocumentWindow(name,
+		MainWindow(juce::String name) : DocumentWindow(name,
 			Colours::lightgrey,
 			DocumentWindow::allButtons)
 		{
