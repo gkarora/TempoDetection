@@ -11,7 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
 #include "MidiThread.h"
-#include "/Users/Melissa/Documents/Code/TempoDetection/ProjFiles/GetBinaryImg.hpp"
+#include "../../GetBinaryImg.hpp"
 #include <thread>
 //#include "Windows.h"
 //#include <conio.h>
