@@ -11,10 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
 #include "MidiThread.h"
-#include "/Users/Melissa/Documents/Code/TempoDetection/ProjFiles/GetBinaryImg.hpp"
 #include <thread>
-//#include "Windows.h"
-//#include <conio.h>
 #include <map>
 
 using namespace std;
@@ -22,7 +19,7 @@ using namespace std;
 extern int currentBpm;
 
 MainContentComponent::MainContentComponent() {
-	setSize(200, 500);
+	setSize(200, 400);
 	bpmLabel.setColour(Label::backgroundColourId, Colours::black);
 	bpmLabel.setColour(Label::textColourId, Colours::white);
 	bpmLabel.setJustificationType(Justification::centred);
@@ -36,26 +33,15 @@ MainContentComponent::MainContentComponent() {
 	bbtLabel.setBounds(0, 100, 200, 100);
 	addAndMakeVisible(bbtLabel);
 
-	addAndMakeVisible(decButton);
-	decButton.setButtonText("-");
-	decButton.setColour(TextButton::textColourOffId, Colours::black);
-	decButton.setBounds(0, 200, 100, 100);
-	decButton.addListener(this);
-	addAndMakeVisible(incButton);
-	incButton.setButtonText("+");
-	incButton.setColour(TextButton::textColourOffId, Colours::black);
-	incButton.setBounds(100, 200, 100, 100);
-	incButton.addListener(this);
-
 	addAndMakeVisible(startButton);
 	startButton.setButtonText("Start");
 	startButton.setColour(TextButton::textColourOffId, Colours::black);
-	startButton.setBounds(0, 300, 200, 100);
+	startButton.setBounds(0, 200, 200, 100);
 	startButton.addListener(this);
 	addAndMakeVisible(stopButton);
 	stopButton.setButtonText("Stop");
 	stopButton.setColour(TextButton::textColourOffId, Colours::black);
-	stopButton.setBounds(0, 400, 200, 100);
+	stopButton.setBounds(0, 300, 200, 100);
 	stopButton.addListener(this);
 	
 	// specify the number of input and output channels that we want to open
@@ -105,15 +91,7 @@ void MainContentComponent::resized() {
 }
 
 void MainContentComponent::buttonClicked(Button* button) {
-	if (button == &incButton) {
-		currentBpm = currentBpm + 5;
-        bpmLabel.setText(juce::String(currentBpm), dontSendNotification);
-	}
-	else if (button == &decButton) {
-		currentBpm = currentBpm - 5;
-        bpmLabel.setText(juce::String(currentBpm), dontSendNotification);
-	}
-	else if (button == &startButton) {
+	if (button == &startButton) {
 		preprocessMidi("Shut_Up_And_Dance.mid");
         bpmLabel.setText(juce::String(currentBpm), dontSendNotification);
         

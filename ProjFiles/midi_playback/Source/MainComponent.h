@@ -26,8 +26,6 @@ public:
 
 private:
 	String currentSizeAsString;
-	TextButton incButton;
-	TextButton decButton;
 	TextButton startButton;
 	TextButton stopButton;
 	Label bpmLabel;
