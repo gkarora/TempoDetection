@@ -45,10 +45,16 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# WINDOWS
+# =========================
+TempoDetection.*
+.vs
+
 # JUCE
 # =========================
 ProjFiles/midi_playback/Builds/
 ProjFiles/midi_playback/JuceLibraryCode/
+ProjFiles/midi_playback/*.jucer
 
 #VS runtime dirs need to be ignored
 /Debug/*
