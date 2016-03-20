@@ -45,19 +45,6 @@ int get_binary_image(){
     
     bool pause = false;
     
-    time_t now = time(0);
-    
-// convert now to string form
-     string dt = ctime(&now);
-    
-        string filename = dt + ".txt";
-    
-        ofstream datafile;
-    
-        datafile.open(filename, ios::app);
-        datafile.close();
-    
-    
     //set up the matrices that we will need
     //the two frames we will be comparing
     Mat frame1,frame2;
