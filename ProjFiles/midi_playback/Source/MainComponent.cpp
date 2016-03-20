@@ -11,8 +11,10 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
 #include "MidiThread.h"
-#include "Windows.h"
-#include <conio.h>
+#include "/Users/Melissa/Documents/Code/TempoDetection/ProjFiles/GetBinaryImg.hpp"
+#include <thread>
+//#include "Windows.h"
+//#include <conio.h>
 #include <map>
 
 using namespace std;
@@ -27,7 +29,7 @@ MainContentComponent::MainContentComponent() {
 	bpmLabel.setBounds(0, 0, 200, 100);
 	addAndMakeVisible(bpmLabel);
 
-	bbtLabel.setText(String("00:00:000"), dontSendNotification);
+    bbtLabel.setText(juce::String("00:00:000"), dontSendNotification);
 	bbtLabel.setColour(Label::backgroundColourId, Colours::black);
 	bbtLabel.setColour(Label::textColourId, Colours::white);
 	bbtLabel.setJustificationType(Justification::centred);
@@ -105,29 +107,35 @@ void MainContentComponent::resized() {
 void MainContentComponent::buttonClicked(Button* button) {
 	if (button == &incButton) {
 		currentBpm = currentBpm + 5;
-		bpmLabel.setText(String(currentBpm), dontSendNotification);
+        bpmLabel.setText(juce::String(currentBpm), dontSendNotification);
 	}
 	else if (button == &decButton) {
 		currentBpm = currentBpm - 5;
-		bpmLabel.setText(String(currentBpm), dontSendNotification);
+        bpmLabel.setText(juce::String(currentBpm), dontSendNotification);
 	}
 	else if (button == &startButton) {
 		preprocessMidi("Shut_Up_And_Dance.mid");
-		bpmLabel.setText(String(currentBpm), dontSendNotification);
+        bpmLabel.setText(juce::String(currentBpm), dontSendNotification);
+        
+        //std::thread t(get_binary_image);
+        //t.detach();
+        
 		midiThread = new MidiThread(this, sequence, ppq, tempos, timeSigs);
 		midiThread->startThread();
 	}
 	else if (button == &stopButton) {
+        midiThread->stopAudio(midiThread->getMidiPort());
 		midiThread->stopThread(1000);
+        
 	}
 }
 
-void MainContentComponent::updateBbt(String bbt) {
+void MainContentComponent::updateBbt(juce::String bbt) {
 	MessageManagerLock mmLock;
 	bbtLabel.setText(bbt, dontSendNotification);
 }
 
-void MainContentComponent::preprocessMidi(String filename) {
+void MainContentComponent::preprocessMidi(juce::String filename) {
 	File inputFile(filename);
 	ScopedPointer<FileInputStream> inputStream = inputFile.createInputStream();
 	if (inputStream) {

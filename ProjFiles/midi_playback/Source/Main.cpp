@@ -7,11 +7,10 @@
 
   ==============================================================================
 */
-
-#include "../../stdafx.h"
-#include "../../GetBinaryImg.hpp"
-#include <thread>
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "/Users/Melissa/Documents/Code/TempoDetection/ProjFiles/stdafx.h"
+#include "/Users/Melissa/Documents/Code/TempoDetection/ProjFiles/GetBinaryImg.hpp"
+#include <thread>
 
 int currentBpm(120);
 

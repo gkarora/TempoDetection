@@ -21,7 +21,7 @@ public:
 	void paint(Graphics& g) override;
 	void resized() override;
 	void buttonClicked(Button* button) override;
-	void MainContentComponent::preprocessMidi(String filename);
+	void preprocessMidi(String filename);
 	void updateBbt(String bbt);
 
 private:

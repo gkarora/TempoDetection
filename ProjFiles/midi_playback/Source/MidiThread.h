@@ -10,6 +10,8 @@ public:
 		std::map<double, double> tempoMap,
 		std::map<double, std::pair<int, int>> timeSigMap);
 	void run() override;
+    void stopAudio(MidiOutput* port);
+    MidiOutput* getMidiPort();
 
 private:
 	MidiOutput* midiPort;
