@@ -35,7 +35,7 @@ void MidiThread::run() {
 	MidiMessage message;
 
 	// MIDI click intro
-	File clickFile("C:/Users/Nicole/Documents/Click120.mid");
+	File clickFile("Click120.mid");
 	ScopedPointer<FileInputStream> clickStream = clickFile.createInputStream();
 	double eventTick;
 	double prevTick = 0;

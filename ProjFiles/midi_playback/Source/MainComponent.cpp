@@ -11,8 +11,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
 #include "MidiThread.h"
-#include "Windows.h"
-#include <conio.h>
 #include <map>
 
 using namespace std;

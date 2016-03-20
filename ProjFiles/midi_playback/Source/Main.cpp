@@ -8,10 +8,10 @@
   ==============================================================================
 */
 
+#include "../JuceLibraryCode/JuceHeader.h"
 #include "../../stdafx.h"
 #include "../../GetBinaryImg.hpp"
 #include <thread>
-#include "../JuceLibraryCode/JuceHeader.h"
 
 int currentBpm(120);
 
