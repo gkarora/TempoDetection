@@ -29,6 +29,7 @@ vector<int> use_houghLineTransform(Mat src, Mat org)
 	//cvtColor(dst, cdst, CV_GRAY2BGR);
 
     vector<Vec4i> lines;
+	lines.reserve(1000);
     HoughLinesP(dst1, lines, 1, CV_PI / 180, 50, 50, 10);
     
 

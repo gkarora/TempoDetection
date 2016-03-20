@@ -9,6 +9,7 @@
 //
 
 #include "GetBinaryImg.hpp"
+#include <ctime>
 extern int currentBpm;
 
 // Keep this consistent with getTempo.cpp
@@ -28,6 +29,20 @@ string intToString(int number)
 }
 
 int get_binary_image(){
+    
+    // current date/time based on current system
+    time_t now = time(0);
+    
+    // convert now to string form
+    string dt = ctime(&now);
+    
+    string filename = dt + ".txt";
+    
+    ofstream datafile;
+    
+    datafile.open(filename, ios::app);
+    datafile.close();
+    
     bool pause = false;
     
     time_t now = time(0);
@@ -113,7 +128,6 @@ int get_binary_image(){
 
         //gkarora
         vector<int> coord = use_houghLineTransform(thresholdImage, frame1);
-        
         if(coord[1] != 10000){
             ypos.push(coord[1]);
             last = coord[1];
@@ -149,34 +163,13 @@ int get_binary_image(){
                 datafile <<  currentBpm << "\n";
                 datafile.close();
                 
-            }
+            } //end if
             ypos.pop();
             
-            
-        }
+        }//end if
         
         ///@MELISSA: CONTROLS for pausing/escape, useful for UI later
-        switch(waitKey(10)){
-                
-            case 27: //'esc' key has been pressed, exit program.
-                return 0;
-                
-            case 112: //'p' has been pressed. this will pause/resume the code.
-                pause = !pause;
-                if(pause == true){ cout<<"Code paused, press 'p' again to resume"<<endl;
-                    while (pause == true){
-                        //stay in this loop until
-                        switch (waitKey()){
-                                //a switch statement inside a switch statement? Mind blown.
-                            case 112:
-                                //change pause back to false
-                                pause = false;
-                                cout<<"Code Resumed"<<endl;
-                                break;
-                        }
-                    }
-                }
-        }
+
         
         // fps counter begin
         time(&end);
@@ -187,7 +180,17 @@ int get_binary_image(){
         if (counter == (INT_MAX - 1000))
             counter = 0;
         // fps counter end
+        
+        //startWindowThread();
+        //int ky = cv::waitKey(400);
+        //cout << ky;
+        
+//        switch(waitKey(10)){
+//            case 100: //'d' key has been pressed, exit program.
+//                cout<<"HELLO";
+//        }
     }
+
     //release the capture before re-opening and looping again.
     capture.release();
     
