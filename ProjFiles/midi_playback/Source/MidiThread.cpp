@@ -71,6 +71,10 @@ void MidiThread::run() {
 	int tickStartNextBar = quartersPerBar * ppq;
 	int i = 0;
 	while (i < midiSequence.getNumEvents() && !threadShouldExit()) {
+		std::stringstream ss;
+		ss << currentBpm;
+		content->updateBpm(ss.str());
+
 		message = midiSequence.getEventPointer(i)->message;
 		eventTick = message.getTimeStamp(); // number of midi ticks until note
 		if (tempoIterator != tempos.end() && eventTick >= tempoIterator->first) {

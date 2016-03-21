@@ -113,6 +113,11 @@ void MainContentComponent::updateBbt(juce::String bbt) {
 	bbtLabel.setText(bbt, dontSendNotification);
 }
 
+void MainContentComponent::updateBpm(juce::String bpm) {
+	MessageManagerLock mmLock;
+	bpmLabel.setText(bpm, dontSendNotification);
+}
+
 void MainContentComponent::preprocessMidi(juce::String filename) {
 	File inputFile(filename);
 	ScopedPointer<FileInputStream> inputStream = inputFile.createInputStream();

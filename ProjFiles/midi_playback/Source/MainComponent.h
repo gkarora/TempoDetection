@@ -23,6 +23,7 @@ public:
 	void buttonClicked(Button* button) override;
 	void preprocessMidi(String filename);
 	void updateBbt(String bbt);
+	void updateBpm(String bpm);
 
 private:
 	String currentSizeAsString;
