@@ -54,7 +54,7 @@ vector<int> use_houghLineTransform(Mat src, Mat org)
     }
     
     circle(org,Point(max_cord[0],max_cord[1]),10,Scalar(0,255,0),2);
-    
+    cv::flip(org, org, 1);
     imshow("Prob Hough Line Transform", org);
     return max_cord;
 }
