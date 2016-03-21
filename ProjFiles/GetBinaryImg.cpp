@@ -130,7 +130,9 @@ int get_binary_image(){
                 int oldTempo = tempo;
                 tempo = getTempo(ypos, fps);
                 double factor = 5;
-                if (abs(tempo-oldTempo)< factor)
+                if (tempo<=0 || tempo>200){
+                    tempo = oldTempo;
+                } else if (abs(tempo-oldTempo)< factor)
                 {
                     currentBpm = tempo;
                 } else if (tempo > (oldTempo+factor)) {
