@@ -26,6 +26,7 @@ void MidiThread::run() {
 
 	map<double, double>::iterator tempoIterator = tempos.begin();
 	double tickLength = tempoIterator->second;
+	double initTempo = 60000 / (tickLength * ppq);
 	tempoIterator++;
 	map<double, std::pair<int, int>>::iterator timeSigIterator = timeSigs.begin();
 	int timeSigNumerator = timeSigIterator->second.first;
@@ -51,7 +52,7 @@ void MidiThread::run() {
 			message = clickSequence.getEventPointer(i)->message;
 			eventTick = message.getTimeStamp();
 			double origBpm = 60000 / (tickLength * clickPpq);
-			double delta = prevDelta + ((eventTick - prevTick) * (origBpm / currentBpm)) * tickLength;
+			double delta = prevDelta + ((eventTick - prevTick) * (origBpm / initTempo)) * tickLength;
 			Time::waitForMillisecondCounter(now + delta);
 			midiPort->sendMessageNow(message);
 			i++;
@@ -69,6 +70,7 @@ void MidiThread::run() {
 	int quartersPerBar = timeSigNumerator * (timeSigDenominator / 4);
 	int tickStartOfBar = 0;
 	int tickStartNextBar = quartersPerBar * ppq;
+	currentBpm = initTempo;
 	int i = 0;
 	while (i < midiSequence.getNumEvents() && !threadShouldExit()) {
 		std::stringstream ss;

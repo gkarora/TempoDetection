@@ -26,7 +26,7 @@ MainContentComponent::MainContentComponent() {
 	bpmLabel.setBounds(0, 0, 200, 100);
 	addAndMakeVisible(bpmLabel);
 
-    bbtLabel.setText(juce::String("00:00:000"), dontSendNotification);
+    bbtLabel.setText(juce::String(""), dontSendNotification);
 	bbtLabel.setColour(Label::backgroundColourId, Colours::black);
 	bbtLabel.setColour(Label::textColourId, Colours::white);
 	bbtLabel.setJustificationType(Justification::centred);
@@ -95,16 +95,14 @@ void MainContentComponent::buttonClicked(Button* button) {
 		preprocessMidi("Shut_Up_And_Dance.mid");
         bpmLabel.setText(juce::String(currentBpm), dontSendNotification);
         
-        //std::thread t(get_binary_image);
-        //t.detach();
-        
 		midiThread = new MidiThread(this, sequence, ppq, tempos, timeSigs);
 		midiThread->startThread();
 	}
 	else if (button == &stopButton) {
         midiThread->stopAudio(midiThread->getMidiPort());
 		midiThread->stopThread(1000);
-        
+		bpmLabel.setText("", dontSendNotification);
+		bbtLabel.setText("", dontSendNotification);
 	}
 }
 

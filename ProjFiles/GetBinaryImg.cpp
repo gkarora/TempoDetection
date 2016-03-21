@@ -43,8 +43,6 @@ int get_binary_image(){
     datafile.open(filename, ios::app);
     datafile.close();
     
-    bool pause = false;
-    
     //set up the matrices that we will need
     //the two frames we will be comparing
     Mat frame1,frame2;
@@ -126,23 +124,16 @@ int get_binary_image(){
         //check is queue is full, if so, call getTempo
         // recal_counter needs to be >= for first iteration, recal_counter will be 20
         if (ypos.size() == QUEUESIZE){
-            if(recal_counter>=RECALSIZE){
-                int oldTempo = tempo;
+            if(recal_counter >= RECALSIZE) {
                 tempo = getTempo(ypos, fps);
                 double factor = 5;
-                if (abs(tempo-oldTempo)< factor)
-                {
+                if (abs(tempo - currentBpm) < factor) {
                     currentBpm = tempo;
-                } else if (tempo > (oldTempo+factor)) {
-                    currentBpm = oldTempo+factor;
-                    tempo = currentBpm;
-                } else if (tempo < (oldTempo-factor)) {
-                    currentBpm = oldTempo - factor;
-                    tempo = currentBpm;
-                } else {
-                    currentBpm = oldTempo;
-                    tempo = currentBpm;
-                }
+                } else if (tempo > (currentBpm + factor)) {
+                    currentBpm = currentBpm + factor;
+                } else if (tempo < (currentBpm - factor)) {
+                    currentBpm = currentBpm - factor;
+                } 
                 
                 recal_counter =0;
                 std::cout << currentBpm << ", ";
