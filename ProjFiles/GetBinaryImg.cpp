@@ -127,17 +127,21 @@ int get_binary_image(){
             if(recal_counter >= RECALSIZE) {
                 tempo = getTempo(ypos, fps);
                 double factor = 5;
-				if (tempo > 0 && tempo < 200) {
-					if (abs(tempo - currentBpm) < factor) {
-						currentBpm = tempo;
-					}
-					else if (tempo > (currentBpm + factor)) {
-						currentBpm = currentBpm + factor;
-					}
-					else if (tempo < (currentBpm - factor)) {
-						currentBpm = currentBpm - factor;
-					}
-				}
+                if (tempo < 20) {
+                    tempo = 20;
+                }
+                else if (tempo > 200) {
+                    tempo = 200;
+                } 
+                if (abs(tempo - currentBpm) < factor) {
+                    currentBpm = tempo;
+                }
+                else if (tempo > (currentBpm + factor)) {
+                    currentBpm = currentBpm + factor;
+                }
+                else if (tempo < (currentBpm - factor)) {
+                    currentBpm = currentBpm - factor;
+                }
                 
                 recal_counter =0;
                 std::cout << currentBpm << ", ";
